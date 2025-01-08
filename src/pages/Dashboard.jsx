@@ -19,7 +19,6 @@ import DashboardCard12 from '../partials/dashboard/DashboardCard12';
 import DashboardCard13 from '../partials/dashboard/DashboardCard13';
 import WastewaterMap from '../charts/WastewaterMap';
 
-import Banner from '../partials/Banner';
 
 function Dashboard() {
 
@@ -94,7 +93,6 @@ function Dashboard() {
           </div>
         </main>
 
-        <Banner />
 
       </div>
     </div>

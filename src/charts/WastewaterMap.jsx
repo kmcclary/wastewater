@@ -85,7 +85,7 @@ const WastewaterMap = () => {
             });
             const marker = L.marker([site.lat, site.lng], { icon }).addTo(mapRef.current);
             marker.on('click', () => {
-              mapRef.current.setView([site.lat, site.lng], 8);
+              mapRef.current.setView([site.lat, site.lng], 8, { animate: true, duration: 1.5 });
               // Remove the cluster marker
               marker.remove();
               // Create child markers
@@ -109,7 +109,9 @@ const WastewaterMap = () => {
                 childMarker.bindPopup(`
                   <div class="text-sm">
                     <strong>${child.name}</strong><br/>
-                    Level: ${child.level}
+                    Level: ${child.level}<br/>
+                    Capacity: ${child.capacity}<br/>
+                    Last Updated: ${child.lastUpdated}
                   </div>
                 `);
                 markersRef.current.push(childMarker);
@@ -137,7 +139,7 @@ const WastewaterMap = () => {
             .addTo(mapRef.current)
             .on('click', () => {
               setSelectedSite(site);
-              mapRef.current.setView([site.lat, site.lng], 12);
+              mapRef.current.setView([site.lat, site.lng], 12, { animate: true, duration: 3 });
 
               // Remove any existing boundary layer
               if (boundaryLayerRef.current) {
@@ -158,7 +160,9 @@ const WastewaterMap = () => {
           marker.bindPopup(`
             <div class="text-sm">
               <strong>${site.name}</strong><br/>
-              Level: ${site.level}
+              Level: ${site.level}<br/>
+              Capacity: ${site.capacity}<br/>
+              Last Updated: ${site.lastUpdated}
             </div>
           `);
 
@@ -233,45 +237,113 @@ const WastewaterMap = () => {
 
   return (
     <Card className="w-full">
-
       <CardContent>
         <div className="relative w-full h-[450px] flex">
           {/* Info Bar */}
           <div className={`absolute h-full w-64 transition-transform duration-300 transform ${
             infoBarExpanded ? 'translate-x-0' : '-translate-x-full'
-          } bg-white p-4 shadow-lg z-[1000]`}>
+          } bg-white shadow-lg z-[1000] flex flex-col`}>
+            {/* Header Section - Fixed */}
+            <div className="p-4">
 
-            <div className="flex gap-2">
-          <button 
-            onClick={handleZoomIn}
-            className="p-2 rounded-full hover:bg-gray-100"
-          >
-            <ZoomIn className="h-4 w-4" />
-          </button>
-          <button 
-            onClick={handleZoomOut}
-            className="p-2 rounded-full hover:bg-gray-100"
-          >
-            <ZoomOut className="h-4 w-4" />
-          </button>
-        </div>
-            <h3 className="text-sm font-semibold mb-2">Information</h3>
-            <div className="space-y-2">
-              <p className="text-sm">Additional information can go here.</p>
+              <h3 className="text-xl font-semibold">Overview</h3>
+            </div>
+
+            {/* Scrollable Content Section */}
+            <div className="flex-1 overflow-y-auto px-4 pb-4">
+              <div className="space-y-2">
+
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-semibold">SARS-CoV-2</p>
+                    <p className="text-sm text-red-500">high</p>
+                  </div>
+                  <p className="text-sm">Upward trend in the last 21 days and high concentration</p>
+                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
+                  {/* Repeat similar blocks for other pathogens */}
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-semibold">RSV</p>
+                    <p className="text-sm text-red-500">high</p>
+                  </div>
+                  <p className="text-sm">Upward trend in the last 21 days and high concentration</p>
+                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-semibold">Influenza A</p>
+                    <p className="text-sm text-red-500">high</p>
+                  </div>
+                  <p className="text-sm">Upward trend in the last 21 days and high concentration</p>
+                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-semibold">Influenza B</p>
+                    <p className="text-sm text-green-500">low</p>
+                  </div>
+                  <p className="text-sm">Pathogen is seasonal and not in onset</p>
+                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-semibold">Human Metapneumovirus</p>
+                    <p className="text-sm text-green-500">low</p>
+                  </div>
+                  <p className="text-sm">Pathogen is seasonal and not in onset</p>
+                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-semibold">Norovirus</p>
+                    <p className="text-sm text-red-500">high</p>
+                  </div>
+                  <p className="text-sm">Upward trend in the last 21 days and high concentration</p>
+                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-semibold">Mpox clade II</p>
+                    <p className="text-sm text-green-500">low</p>
+                  </div>
+                  <p className="text-sm">0 out of 379 samples in the past 10 days were positive</p>
+                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-semibold">EVD68</p>
+                    <p className="text-sm text-green-500">low</p>
+                  </div>
+                  <p className="text-sm">Pathogen is seasonal and not in onset</p>
+                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-semibold">Candida auris</p>
+                    <p className="text-sm text-green-500">low</p>
+                  </div>
+                  <p className="text-sm">18 out of 379 samples in the past 10 days were positive</p>
+                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-semibold">Hepatitis A</p>
+                    <p className="text-sm text-green-500">low</p>
+                  </div>
+                  <p className="text-sm">38 out of 379 samples in the past 10 days were positive</p>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Map Container */}
           <div 
+          
             ref={mapContainerRef} 
             className={`absolute inset-0 transition-all duration-300 ${
               infoBarExpanded ? 'left-64' : 'left-0'
             } rounded-lg overflow-hidden bg-gray-100`}
             style={{ minHeight: '400px' }}
           />
-
+          <div className="absolute top-8 left-72 bg-white p-2 rounded-lg shadow-lg z-[1000]">
+          <button 
+                  onClick={handleZoomIn}
+                  className="p-2 rounded-full hover:bg-gray-100"
+                >
+                  <ZoomIn className="h-4 w-4" />
+                </button>
+                <button 
+                  onClick={handleZoomOut}
+                  className="p-2 rounded-full hover:bg-gray-100"
+                >
+                  <ZoomOut className="h-4 w-4" />
+                </button>
+          </div>
           {/* Legend */}
-          <div className="absolute bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg z-[1000]">
+          <div className="absolute bottom-8 left-72 bg-white p-2 rounded-lg shadow-lg z-[1000]">
             <h3 className="text-sm font-semibold mb-2">Pathogen Levels</h3>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
@@ -288,24 +360,6 @@ const WastewaterMap = () => {
               </div>
             </div>
           </div>
-
-          {/* Site Information Panel */}
-          {selectedSite && (
-            <div className="absolute top-4 right-4 w-64 bg-white p-4 rounded-lg shadow-lg z-[1000]">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-semibold">{selectedSite.name}</h3>
-                <button 
-                  onClick={() => setSelectedSite(null)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  ×
-                </button>
-              </div>
-  
-            </div>
-          )}
-
-
         </div>
       </CardContent>
     </Card>
