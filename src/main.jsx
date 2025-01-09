@@ -4,9 +4,12 @@ import { HashRouter } from 'react-router-dom';
 import ThemeProvider from './utils/ThemeContext';
 import App from './App';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const root = document.getElementById('root');
+console.log('Root element:', root); // Add debugging
+
+ReactDOM.createRoot(root).render(
   <React.StrictMode>
-    <HashRouter>
+    <HashRouter basename="">
       <ThemeProvider>
         <App />
       </ThemeProvider>

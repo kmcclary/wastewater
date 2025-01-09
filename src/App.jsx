@@ -5,11 +5,18 @@ import './charts/ChartjsConfig';
 import Dashboard from './pages/Dashboard';
 
 function App() {
+  console.log('App rendering'); // Add debugging
+
   return (
-    <Routes>
-      <Route path="/" element={<Dashboard />} />
-      <Route path="*" element={<Dashboard />} />
-    </Routes>
+    <div className="app-wrapper">
+      <Routes>
+        <Route path="/" element={
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Dashboard />
+          </React.Suspense>
+        } />
+      </Routes>
+    </div>
   );
 }
 
