@@ -2,7 +2,7 @@
   "name": "mosaic-react",
   "version": "0.1.0",
   "type": "module",
-  "homepage": "https://kcclary.github.io/wastewater",
+  "homepage": "https://kmcclary.github.io/wastewater/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
