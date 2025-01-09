@@ -1,22 +1,28 @@
-import path from 'path';
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import path from 'path'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  base: '/wastewater/',
+  base: '/wastewater/', // Add this line
+
+  define: {
+    'process.env': process.env
+  },
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@tailwindConfig': path.resolve(__dirname, './tailwind.config.js')
+      '@tailwindConfig': path.resolve(__dirname, 'tailwind.config.js'),
     },
   },
+  optimizeDeps: {
+    include: [
+      '@tailwindConfig',
+    ]
+  }, 
   build: {
-    outDir: 'dist',
-    sourcemap: true
-  },
-  server: {
-    port: 5173,
-    strictPort: true,
-  }
-});
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    }
+  } 
+})
