@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import './css/style.css';
 import './charts/ChartjsConfig';
 import Dashboard from './pages/Dashboard';
