@@ -18,10 +18,11 @@ export default defineConfig(({ command }) => ({
     include: [
       '@tailwindConfig',
     ]
-  }, 
+  },
   build: {
+    outDir: 'dist', // Ensure this is set to your desired output directory
     commonjsOptions: {
       transformMixedEsModules: true,
     }
-  } 
+  }
 }))
