@@ -8,27 +8,15 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@tailwindConfig': path.resolve(__dirname, './tailwind.config.js')
     },
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-    },
-    commonjsOptions: {
-      transformMixedEsModules: true,
-    }
+    sourcemap: true
   },
   server: {
     port: 5173,
     strictPort: true,
-  },
-  optimizeDeps: {
-    include: [
-      '@tailwindConfig',
-    ]
   }
 });

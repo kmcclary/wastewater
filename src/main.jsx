@@ -7,12 +7,16 @@ import App from './App';
 const root = document.getElementById('root');
 console.log('Root element:', root); // Add debugging
 
-ReactDOM.createRoot(root).render(
-  <React.StrictMode>
-    <HashRouter basename="">
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </HashRouter>
-  </React.StrictMode>
-);
+if (root) {
+  ReactDOM.createRoot(root).render(
+    <React.StrictMode>
+      <HashRouter basename="">
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </HashRouter>
+    </React.StrictMode>
+  );
+} else {
+  console.error('Root element not found');
+}

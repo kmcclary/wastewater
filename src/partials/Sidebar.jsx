@@ -8,6 +8,8 @@ function Sidebar({
   setSidebarOpen,
   variant = 'default',
 }) {
+  console.log('Sidebar rendering'); // Add debugging
+
   const location = useLocation();
   const { pathname } = location;
 

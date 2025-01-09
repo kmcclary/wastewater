@@ -22,6 +22,7 @@ import WastewaterMap from '../charts/WastewaterMap';
 
 
 function Dashboard() {
+  console.log('Dashboard rendering'); // Add debugging
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
