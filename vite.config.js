@@ -3,11 +3,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => ({
+export default defineConfig({
   define: {
     'process.env': process.env
   },
-  base: command === 'serve' ? '/' : '/wastewater/',
   plugins: [react()],
   resolve: {
     alias: {
@@ -24,4 +23,4 @@ export default defineConfig(({ command }) => ({
       transformMixedEsModules: true,
     }
   } 
-}))
+})
