@@ -1,14 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LineChart from '../../charts/LineChart01';
-import { chartAreaGradient } from '../../charts/ChartjsConfig';
 import EditMenu from '../../components/DropdownEditMenu';
 
-// Import utilities
-import { tailwindConfig, hexToRGB } from '../../utils/Utils';
+// Import utilities (used if you have tailwindConfig, hexToRGB, etc.)
+import { tailwindConfig } from '../../utils/Utils';
 
 function DashboardCard01() {
-
   const chartData = {
     labels: [
       '12-01-2022',
@@ -39,80 +37,165 @@ function DashboardCard01() {
       '01-01-2025',
     ],
     datasets: [
-      // Indigo line
+
+      // South region
       {
-        data: [732, 610, 610, 504, 504, 504, 349, 349, 504, 342, 504, 610, 391, 192, 154, 273, 191, 191, 126, 263, 349, 252, 423, 622, 470, 532],
-        fill: true,
-        backgroundColor: function(context) {
-          const chart = context.chart;
-          const {ctx, chartArea} = chart;
-          return chartAreaGradient(ctx, chartArea, [
-            { stop: 0, color: `rgba(${hexToRGB(tailwindConfig().theme.colors.violet[500])}, 0)` },
-            { stop: 1, color: `rgba(${hexToRGB(tailwindConfig().theme.colors.violet[500])}, 0.2)` }
-          ]);
-        },            
-        borderColor: tailwindConfig().theme.colors.violet[500],
+        label: 'South',
+        data: [
+          589, 302, 622, 334, 656, 579, 788, 302, 712, 398, 582, 368, 659,
+          342, 532, 545, 662, 378, 592, 402, 712, 432, 742, 450, 642, 432,
+        ],
+        fill: false,
+        borderColor: tailwindConfig().theme.colors.yellow[500],
         borderWidth: 2,
         pointRadius: 0,
         pointHoverRadius: 3,
-        pointBackgroundColor: tailwindConfig().theme.colors.violet[500],
-        pointHoverBackgroundColor: tailwindConfig().theme.colors.violet[500],
-        pointBorderWidth: 0,
-        pointHoverBorderWidth: 0,
-        clip: 20,
+        pointBackgroundColor: tailwindConfig().theme.colors.yellow[500],
+        pointHoverBackgroundColor: tailwindConfig().theme.colors.yellow[500],
         tension: 0.2,
       },
-      // Gray line
+      // Midwest region
       {
-        data: [532, 532, 532, 404, 404, 314, 314, 314, 314, 314, 234, 314, 234, 234, 314, 314, 314, 388, 314, 202, 202, 202, 202, 314, 720, 642],
-        borderColor: `rgba(${hexToRGB(tailwindConfig().theme.colors.gray[500])}, 0.25)`,
+        label: 'Midwest',
+        data: [
+          445, 512, 478, 601, 523, 689, 534, 567, 634, 645, 678, 589, 634,
+          567, 489, 523, 478, 545, 589, 612, 645, 678, 701, 645, 589, 556,
+        ],
+        fill: false,
+        borderColor: tailwindConfig().theme.colors.green[500],
         borderWidth: 2,
         pointRadius: 0,
         pointHoverRadius: 3,
-        pointBackgroundColor: `rgba(${hexToRGB(tailwindConfig().theme.colors.gray[500])}, 0.25)`,
-        pointHoverBackgroundColor: `rgba(${hexToRGB(tailwindConfig().theme.colors.gray[500])}, 0.25)`,
-        pointBorderWidth: 0,
-        pointHoverBorderWidth: 0,
-        clip: 20,
+        pointBackgroundColor: tailwindConfig().theme.colors.green[500],
+        pointHoverBackgroundColor: tailwindConfig().theme.colors.green[500],
+        tension: 0.2,
+      },
+      // Northwest region
+      {
+        label: 'Northwest',
+        data: [
+          512, 489, 556, 523, 589, 612, 645, 589, 634, 601, 567, 545, 578,
+          601, 634, 656, 689, 712, 678, 645, 612, 589, 567, 545, 523, 501,
+        ],
+        fill: false,
+        borderColor: tailwindConfig().theme.colors.blue[500],
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        pointBackgroundColor: tailwindConfig().theme.colors.blue[500],
+        pointHoverBackgroundColor: tailwindConfig().theme.colors.blue[500],
+        tension: 0.2,
+      },
+      // Southeast region
+      {
+        label: 'Southeast',
+        data: [
+          478, 512, 545, 578, 601, 634, 667, 689, 712, 678, 645, 612, 589,
+          567, 545, 523, 501, 478, 456, 434, 412, 389, 367, 345, 323, 301,
+        ],
+        fill: false,
+        borderColor: tailwindConfig().theme.colors.pink[500],
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        pointBackgroundColor: tailwindConfig().theme.colors.pink[500],
+        pointHoverBackgroundColor: tailwindConfig().theme.colors.pink[500],
         tension: 0.2,
       },
     ],
+  };
+
+  // Chart.js options
+  const chartOptions = {
+    plugins: {
+      // ADD LEGEND (TOP-RIGHT CORNER)
+      legend: {
+        display: true,
+        position: 'top',
+        align: 'end',
+        labels: {
+          usePointStyle: true,
+          padding: 20,
+          boxWidth: 8,
+          boxHeight: 8,
+          color: tailwindConfig().theme.colors.gray[500],
+          font: {
+            size: 11,
+          },
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            // e.g. "Northeast: 532 gc/mL"
+            return `${context.dataset.label}: ${context.parsed.y} gc/mL`;
+          },
+        },
+      },
+    },
+    scales: {
+      y: {
+        ticks: {
+          // Show "gc/mL" instead of any currency format
+          callback: (value) => `${value} gc/mL`,
+        },
+      },
+    },
   };
 
   return (
     <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
       <div className="px-5 pt-5">
         <header className="flex justify-between items-start mb-2">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Acme Plus</h2>
-          {/* Menu button */}
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
+            Regional Viral Load Trends
+          </h2>
           <EditMenu align="right" className="relative inline-flex">
             <li>
-              <Link className="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 flex py-1 px-3" to="#0">
+              <Link
+                className="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 flex py-1 px-3"
+                to="#0"
+              >
                 Option 1
               </Link>
             </li>
             <li>
-              <Link className="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 flex py-1 px-3" to="#0">
+              <Link
+                className="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 flex py-1 px-3"
+                to="#0"
+              >
                 Option 2
               </Link>
             </li>
             <li>
-              <Link className="font-medium text-sm text-red-500 hover:text-red-600 flex py-1 px-3" to="#0">
+              <Link
+                className="font-medium text-sm text-red-500 hover:text-red-600 flex py-1 px-3"
+                to="#0"
+              >
                 Remove
               </Link>
             </li>
           </EditMenu>
         </header>
-        <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-1">Sales</div>
+        <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-1">
+          National Average
+        </div>
         <div className="flex items-start">
-          <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">$24,780</div>
-          <div className="text-sm font-medium text-green-700 px-1.5 bg-green-500/20 rounded-full">+49%</div>
+          <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">
+            542 gc/mL
+          </div>
+          <div className="text-sm font-medium text-blue-700 px-1.5 bg-blue-500/20 rounded-full">
+            +8%
+          </div>
         </div>
       </div>
-      {/* Chart built with Chart.js 3 */}
-      <div className="grow max-sm:max-h-[128px] xl:max-h-[128px]">
-        {/* Change the height attribute to adjust the chart height */}
-        <LineChart data={chartData} width={389} height={128} />
+      <div className="grow max-sm:max-h-[148px] xl:max-h-[148px]">
+        <LineChart
+          data={chartData}
+          width={389}
+          height={148}
+          options={chartOptions}
+        />
       </div>
     </div>
   );

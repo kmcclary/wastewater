@@ -15,7 +15,7 @@ import 'leaflet/dist/leaflet.css';
 const mapStyles = `
   .leaflet-container {
     height: 100%;
-    width: 75%;
+    width: 100%;
     border-radius: 0.5rem;
   }
 `;
@@ -28,6 +28,7 @@ const WastewaterMap = () => {
   const markersRef = useRef([]);
   const boundaryLayerRef = useRef(null);
   const resizeObserverRef = useRef(null);
+  const [activeRegion, setActiveRegion] = useState(null);
 
   const getLevelColor = (level) => {
     switch (level) {
@@ -39,6 +40,49 @@ const WastewaterMap = () => {
         return '#10B981';
       default:
         return '#6B7280';
+    }
+  };
+
+  const pathogenRegions = {
+    'SARS-CoV-2': [
+      // Central US - smaller region around Kansas/Missouri
+      [[39.5, -98.0], [39.5, -94.0], [37.0, -94.0], [37.0, -98.0]]
+    ],
+    'RSV': [
+      [[47.0, -124.0], [47.0, -116.0], [42.0, -116.0], [42.0, -124.0]], // Pacific Northwest
+    ],
+    'Influenza A': [
+      [[36.0, -121.0], [36.0, -114.0], [32.0, -114.0], [32.0, -121.0]], // Southwest
+    ],
+    'Influenza B': [
+      [[41.0, -76.0], [41.0, -72.0], [37.0, -72.0], [37.0, -76.0]]
+    ],
+    // Add more regions as needed
+  };
+
+  const handlePathogenClick = (pathogenName) => {
+    // Remove existing region
+    if (boundaryLayerRef.current) {
+      boundaryLayerRef.current.remove();
+      boundaryLayerRef.current = null;
+    }
+
+    // Draw new region if exists
+    const regions = pathogenRegions[pathogenName];
+    if (regions && mapRef.current) {
+      boundaryLayerRef.current = L.polygon(regions, {
+        color: getLevelColor('high'),
+        weight: 2,
+        fillOpacity: 0.2,
+        dashArray: '5, 10',
+      }).addTo(mapRef.current);
+
+      // Fit map to show the region
+      mapRef.current.fitBounds(boundaryLayerRef.current.getBounds(), {
+        padding: [50, 50],
+        animate: true,
+        duration: 1
+      });
     }
   };
 
@@ -236,133 +280,139 @@ const WastewaterMap = () => {
   };
 
   return (
-    <Card className="w-full">
-      <CardContent>
-        <div className="relative w-full h-[450px] flex">
-          {/* Info Bar */}
-          <div className={`absolute h-full w-64 transition-transform duration-300 transform ${
-            infoBarExpanded ? 'translate-x-0' : '-translate-x-full'
-          } bg-white shadow-lg z-[1000] flex flex-col`}>
-            {/* Header Section - Fixed */}
-            <div className="p-4">
+  <Card>
+    <CardContent className="p-0"> {/* Remove default padding */}
+      <div className="relative w-full h-[450px] flex overflow-hidden"> {/* Add overflow-hidden */}
+        {/* Sidebar */}
+        <div className="w-64 flex-shrink-0 flex flex-col bg-white z-10 border-r"> {/* Add flex-shrink-0 and border */}
+          {/* Fixed Header */}
+          <div className="p-2">
+            <h3 className="text-xl font-semibold">Overview</h3>
+          </div>
 
-              <h3 className="text-xl font-semibold">Overview</h3>
-            </div>
-
-            {/* Scrollable Content Section */}
-            <div className="flex-1 overflow-y-auto px-4 pb-4">
-              <div className="space-y-2">
-
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm font-semibold">SARS-CoV-2</p>
-                    <p className="text-sm text-red-500">high</p>
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto px-2 pb-4">
+            <div className="space-y-3">
+              {[
+                {
+                  name: 'SARS-CoV-2',
+                  level: 'high',
+                  description: 'Upward trend in the last 21 days and high concentration'
+                },
+                {
+                  name: 'RSV',
+                  level: 'high',
+                  description: 'Upward trend in the last 21 days and high concentration'
+                },
+                {
+                  name: 'Influenza A',
+                  level: 'high',
+                  description: 'Upward trend in the last 21 days and high concentration'
+                },
+                {
+                  name: 'Influenza B',
+                  level: 'low',
+                  description: 'Pathogen is seasonal and not in onset'
+                },
+                {
+                  name: 'Human Metapneumovirus',
+                  level: 'low',
+                  description: 'Pathogen is seasonal and not in onset'
+                },
+                {
+                  name: 'Norovirus',
+                  level: 'high',
+                  description: 'Upward trend in the last 21 days and high concentration'
+                },
+                {
+                  name: 'Mpox clade II',
+                  level: 'low',
+                  description: '0 out of 379 samples in the past 10 days were positive'
+                },
+                {
+                  name: 'EVD68',
+                  level: 'low',
+                  description: 'Pathogen is seasonal and not in onset'
+                },
+                {
+                  name: 'Candida auris',
+                  level: 'low',
+                  description: '18 out of 379 samples in the past 10 days were positive'
+                },
+                {
+                  name: 'Hepatitis A',
+                  level: 'low',
+                  description: '38 out of 379 samples in the past 10 days were positive'
+                }
+              ].map((pathogen, index) => (
+                <div
+                  key={index}
+                  onClick={() => handlePathogenClick(pathogen.name)}
+                  className="bg-white rounded-lg p-3 shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <h4 className="text-sm font-semibold">{pathogen.name}</h4>
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      pathogen.level === 'high' 
+                        ? 'bg-red-100 text-red-600' 
+                        : 'bg-green-100 text-green-600'
+                    }`}>
+                      {pathogen.level}
+                    </span>
                   </div>
-                  <p className="text-sm">Upward trend in the last 21 days and high concentration</p>
-                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
-                  {/* Repeat similar blocks for other pathogens */}
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm font-semibold">RSV</p>
-                    <p className="text-sm text-red-500">high</p>
-                  </div>
-                  <p className="text-sm">Upward trend in the last 21 days and high concentration</p>
-                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm font-semibold">Influenza A</p>
-                    <p className="text-sm text-red-500">high</p>
-                  </div>
-                  <p className="text-sm">Upward trend in the last 21 days and high concentration</p>
-                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm font-semibold">Influenza B</p>
-                    <p className="text-sm text-green-500">low</p>
-                  </div>
-                  <p className="text-sm">Pathogen is seasonal and not in onset</p>
-                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm font-semibold">Human Metapneumovirus</p>
-                    <p className="text-sm text-green-500">low</p>
-                  </div>
-                  <p className="text-sm">Pathogen is seasonal and not in onset</p>
-                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm font-semibold">Norovirus</p>
-                    <p className="text-sm text-red-500">high</p>
-                  </div>
-                  <p className="text-sm">Upward trend in the last 21 days and high concentration</p>
-                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm font-semibold">Mpox clade II</p>
-                    <p className="text-sm text-green-500">low</p>
-                  </div>
-                  <p className="text-sm">0 out of 379 samples in the past 10 days were positive</p>
-                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm font-semibold">EVD68</p>
-                    <p className="text-sm text-green-500">low</p>
-                  </div>
-                  <p className="text-sm">Pathogen is seasonal and not in onset</p>
-                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm font-semibold">Candida auris</p>
-                    <p className="text-sm text-green-500">low</p>
-                  </div>
-                  <p className="text-sm">18 out of 379 samples in the past 10 days were positive</p>
-                  <p className="text-sm text-gray-500 cursor-pointer">?</p>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm font-semibold">Hepatitis A</p>
-                    <p className="text-sm text-green-500">low</p>
-                  </div>
-                  <p className="text-sm">38 out of 379 samples in the past 10 days were positive</p>
+                  <p className="text-xs text-gray-600">{pathogen.description}</p>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Map Container */}
-          <div 
-          
-            ref={mapContainerRef} 
-            className={`absolute inset-0 transition-all duration-300 ${
-              infoBarExpanded ? 'left-64' : 'left-0'
-            } rounded-lg overflow-hidden bg-gray-100`}
-            style={{ minHeight: '400px' }}
-          />
-          <div className="absolute top-8 left-72 bg-white p-2 rounded-lg shadow-lg z-[1000]">
-          <button 
-                  onClick={handleZoomIn}
-                  className="p-2 rounded-full hover:bg-gray-100"
-                >
-                  <ZoomIn className="h-4 w-4" />
-                </button>
-                <button 
-                  onClick={handleZoomOut}
-                  className="p-2 rounded-full hover:bg-gray-100"
-                >
-                  <ZoomOut className="h-4 w-4" />
-                </button>
-          </div>
-          {/* Legend */}
-          <div className="absolute bottom-8 left-72 bg-white p-2 rounded-lg shadow-lg z-[1000]">
-            <h3 className="text-sm font-semibold mb-2">Pathogen Levels</h3>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <span className="text-sm">High</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <span className="text-sm">Medium</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-                <span className="text-sm">Low</span>
-              </div>
+              ))}
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+
+        {/* Map Container - updated styling */}
+        <div 
+          ref={mapContainerRef} 
+          className={`flex-1 transition-all duration-300 ${
+            infoBarExpanded ? '' : 'ml-[-16rem]'
+          } rounded-r-lg overflow-hidden bg-gray-100`}
+          style={{ minHeight: '400px' }}
+        />
+        
+        {/* Update left positioning for controls */}
+        <div className="absolute top-8 left-[280px] bg-white p-2 rounded-lg shadow-lg z-[1000]">
+          <button 
+                onClick={handleZoomIn}
+                className="p-2 rounded-full hover:bg-gray-100"
+              >
+                <ZoomIn className="h-4 w-4" />
+              </button>
+              <button 
+                onClick={handleZoomOut}
+                className="p-2 rounded-full hover:bg-gray-100"
+              >
+                <ZoomOut className="h-4 w-4" />
+              </button>
+        </div>
+
+        {/* Update left positioning for legend */}
+        <div className="absolute bottom-8 left-[280px] bg-white p-2 rounded-lg shadow-lg z-[1000]">
+          <h3 className="text-sm font-semibold mb-2">Pathogen Levels</h3>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <span className="text-sm">High</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-yellow-500" />
+              <span className="text-sm">Medium</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <span className="text-sm">Low</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
   );
 };
 

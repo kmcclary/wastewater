@@ -17,6 +17,7 @@ import DashboardCard10 from '../partials/dashboard/DashboardCard10';
 import DashboardCard11 from '../partials/dashboard/DashboardCard11';
 import DashboardCard12 from '../partials/dashboard/DashboardCard12';
 import DashboardCard13 from '../partials/dashboard/DashboardCard13';
+import DashboardCardRegionTrends from '../partials/dashboard/DashboardCardRegionTrends';
 import WastewaterMap from '../charts/WastewaterMap';
 
 
@@ -40,7 +41,7 @@ function Dashboard() {
           <div className="px-4 sm:px-6 lg:px-8 py-4 w-full max-w-9xl mx-auto">
 
             {/* Dashboard actions */}
-            <div className="relative z-30"> {/* Add wrapper with higher z-index */}
+            <div className="relative z-20"> {/* Changed from z-30 to z-20 */}
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
                 {/* Left: Title */}
                 <div className="mb-4 sm:mb-0">
@@ -53,6 +54,7 @@ function Dashboard() {
                   <Datepicker align="right" />
                 </div>
               </div>
+              
             </div>
 
             <div className="relative z-20"> {/* Map container with lower z-index */}
@@ -60,33 +62,34 @@ function Dashboard() {
             </div>
             {/* Cards */}
             <div className="grid grid-cols-12 gap-6 mt-6">
-
+              <DashboardCardRegionTrends />
               {/* Line chart (Acme Plus) */}
-             
+              <DashboardCard01 />
               {/* Line chart (Acme Advanced) */}
               <DashboardCard02 />
-              {/* Line chart (Acme Professional) */}
-              <DashboardCard03 />
-              {/* Bar chart (Direct vs Indirect) */}
-              <DashboardCard04 />
-              {/* Line chart (Real Time Value) */}
-              <DashboardCard05 />
-              {/* Doughnut chart (Top Countries) */}
+              <DashboardCard13 />
+
               <DashboardCard06 />
+              <DashboardCard03 />
+              
+              {/* Bar chart (Direct vs Indirect) */}
+              {/* <DashboardCard04 /> */}
+              {/* Line chart (Real Time Value) */}
+              {/* <DashboardCard05 /> */}
+              {/* Doughnut chart (Top Countries) */}
+
               {/* Table (Top Channels) */}
               <DashboardCard07 />
               {/* Line chart (Sales Over Time) */}
               <DashboardCard08 />
-              {/* Stacked bar chart (Sales VS Refunds) */}
-              <DashboardCard09 />
+
               {/* Card (Customers) */}
               <DashboardCard10 />
-              {/* Card (Reasons for Refunds) */}
-              <DashboardCard11 />
+
               {/* Card (Recent Activity) */}
               <DashboardCard12 />
               {/* Card (Income/Expenses) */}
-              <DashboardCard13 />
+
               
             </div>
 

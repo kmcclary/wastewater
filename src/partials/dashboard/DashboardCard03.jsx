@@ -8,6 +8,21 @@ import EditMenu from '../../components/DropdownEditMenu';
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
 
 function DashboardCard03() {
+  const sites = [
+    { name: 'Site A', status: 'active', lastUpdate: '5 min ago', coverage: 98 },
+    { name: 'Site B', status: 'active', lastUpdate: '12 min ago', coverage: 95 },
+    { name: 'Site C', status: 'maintenance', lastUpdate: '1 hour ago', coverage: 0 },
+    { name: 'Site D', status: 'issue', lastUpdate: '25 min ago', coverage: 76 }
+  ];
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'maintenance': return 'bg-yellow-100 text-yellow-800';
+      case 'issue': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
 
   const chartData = {
     labels: [
@@ -73,39 +88,25 @@ function DashboardCard03() {
   };
 
   return (
-    <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
-      <div className="px-5 pt-5">
-        <header className="flex justify-between items-start mb-2">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Acme Professional</h2>
-          {/* Menu button */}
-          <EditMenu align="right" className="relative inline-flex">
-            <li>
-              <Link className="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 flex py-1 px-3" to="#0">
-                Option 1
-              </Link>
-            </li>
-            <li>
-              <Link className="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 flex py-1 px-3" to="#0">
-                Option 2
-              </Link>
-            </li>
-            <li>
-              <Link className="font-medium text-sm text-red-500 hover:text-red-600 flex py-1 px-3" to="#0">
-                Remove
-              </Link>
-            </li>
-          </EditMenu>
-        </header>
-        <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-1">Sales</div>
-        <div className="flex items-start">
-          <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">$9,962</div>
-          <div className="text-sm font-medium text-green-700 px-1.5 bg-green-500/20 rounded-full">+49%</div>
-        </div>
-      </div>
-      {/* Chart built with Chart.js 3 */}
-      <div className="grow max-sm:max-h-[128px] xl:max-h-[128px]">
-        {/* Change the height attribute to adjust the chart height */}
-        <LineChart data={chartData} width={389} height={128} />
+    <div className="col-span-full xl:col-span-6 bg-white dark:bg-slate-800 shadow-lg rounded-lg border border-slate-200 dark:border-slate-700">
+      <header className="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
+        <h2 className="font-semibold text-slate-800 dark:text-slate-100">Collection Sites Status</h2>
+      </header>
+      <div className="p-3">
+        {sites.map(site => (
+          <div key={site.name} className="flex items-center justify-between p-4 border-b last:border-0">
+            <div>
+              <h3 className="font-semibold">{site.name}</h3>
+              <p className="text-sm text-slate-500">Last update: {site.lastUpdate}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-sm">{site.coverage}% coverage</span>
+              <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(site.status)}`}>
+                {site.status}
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

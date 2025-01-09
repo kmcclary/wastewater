@@ -44,15 +44,28 @@ function LineChart01({
             time: {
               parser: 'MM-DD-YYYY',
               unit: 'month',
+              displayFormats: {
+                month: 'MM/YY'
+              }
             },
-            display: false,
+            display: true,
+            grid: {
+              display: true
+            },
+            ticks: {
+              autoSkip: true,
+              maxTicksLimit: 4,
+              color: darkMode ? '#9CA3AF' : '#6B7280'
+            }
           },
         },
         plugins: {
           tooltip: {
+            mode: 'index',
+            intersect: false,
             callbacks: {
               title: () => false, // Disable tooltip title
-              label: (context) => formatValue(context.parsed.y),
+              label: (context) => `${context.dataset.label}: ${context.parsed.y} gc/mL`,
             },
             bodyColor: darkMode ? tooltipBodyColor.dark : tooltipBodyColor.light,
             backgroundColor: darkMode ? tooltipBgColor.dark : tooltipBgColor.light,

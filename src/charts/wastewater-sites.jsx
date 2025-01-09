@@ -21,6 +21,10 @@ export const sites = [
   { id: 10, name: 'Miami Treatment Plant', lat: 25.7617, lng: -80.1918, level: 'high', capacity: '500 MGD', lastUpdated: '2023-10-02' },
   { id: 11, name: 'Phoenix Treatment Plant', lat: 33.4484, lng: -112.0740, level: 'low', capacity: '350 MGD', lastUpdated: '2023-09-22' },
   { id: 12, name: 'Boston Treatment Plant', lat: 42.3601, lng: -71.0589, level: 'medium', capacity: '400 MGD', lastUpdated: '2023-09-18' },
+  { id: 20, name: 'Kansas City Treatment Plant', lat: 39.0997, lng: -94.5786, level: 'medium', capacity: '350 MGD', lastUpdated: '2023-10-10' },
+  { id: 21, name: 'Portland Treatment Plant', lat: 45.5155, lng: -122.6789, level: 'medium', capacity: '450 MGD', lastUpdated: '2023-10-12' },
+  { id: 22, name: 'Boise Treatment Plant', lat: 43.6150, lng: -116.2023, level: 'low', capacity: '250 MGD', lastUpdated: '2023-10-12' },
+  { id: 23, name: 'Wichita Treatment Plant', lat: 37.6872, lng: -97.3301, level: 'high', capacity: '300 MGD', lastUpdated: '2023-10-13' },
   // Florida Cluster
   {
     id: 'florida-cluster',

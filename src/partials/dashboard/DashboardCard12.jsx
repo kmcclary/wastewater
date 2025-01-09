@@ -2,9 +2,9 @@ import React from 'react';
 
 function DashboardCard12() {
   return (
-    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
-      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">Recent Activity</h2>
+    <div className="col-span-full xl:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl border border-gray-200 dark:border-gray-700">
+      <header className="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+        <h2 className="font-semibold text-gray-800 dark:text-gray-100">Recent Wastewater Monitoring Events</h2>
       </header>
       <div className="p-3">
 
@@ -13,18 +13,19 @@ function DashboardCard12() {
         <div>
           <header className="text-xs uppercase text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700 dark:bg-opacity-50 rounded-sm font-semibold p-2">Today</header>
           <ul className="my-1">
-            {/* Item */}
+            {/* Alert Item */}
             <li className="flex px-2">
-              <div className="w-9 h-9 rounded-full shrink-0 bg-violet-500 my-2 mr-3">
-                <svg className="w-9 h-9 fill-current text-white" viewBox="0 0 36 36">
-                  <path d="M18 10c-4.4 0-8 3.1-8 7s3.6 7 8 7h.6l5.4 2v-4.4c1.2-1.2 2-2.8 2-4.6 0-3.9-3.6-7-8-7zm4 10.8v2.3L18.9 22H18c-3.3 0-6-2.2-6-5s2.7-5 6-5 6 2.2 6 5c0 2.2-2 3.8-2 3.8z" />
+              <div className="w-9 h-9 rounded-full shrink-0 bg-red-500 my-2 mr-3">
+                <svg className="w-9 h-9 fill-current text-white p-2" viewBox="0 0 36 36">
+                  <path d="M18 10l-.7 12h1.4l-.7-12zm.7 14h-1.4l-.3 2h2l-.3-2z" />
+                  <path d="M18 3C9.7 3 3 9.7 3 18s6.7 15 15 15 15-6.7 15-15S26.3 3 18 3zm0 28C10.8 31 5 25.2 5 18S10.8 5 18 5s13 5.8 13 13-5.8 13-13 13z" />
                 </svg>
               </div>
               <div className="grow flex items-center border-b border-gray-100 dark:border-gray-700/60 text-sm py-2">
                 <div className="grow flex justify-between">
-                  <div className="self-center"><a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Nick Mark</a> mentioned <a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Sara Smith</a> in a new post</div>
+                  <div className="self-center">High concentration of <a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">SARS-CoV-2</a> detected at <a className="font-medium text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white" href="#0">Station #127</a></div>
                   <div className="shrink-0 self-end ml-2">
-                    <a className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="#0">View<span className="hidden sm:inline"> -&gt;</span></a>
+                    <a className="font-medium text-red-500 hover:text-red-600 dark:hover:text-red-400" href="#0">Alert<span className="hidden sm:inline"> -&gt;</span></a>
                   </div>
                 </div>
               </div>

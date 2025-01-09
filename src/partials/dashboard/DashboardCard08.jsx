@@ -1,101 +1,60 @@
 import React from 'react';
-import { chartAreaGradient } from '../../charts/ChartjsConfig';
-import LineChart from '../../charts/LineChart02';
-
-// Import utilities
-import { tailwindConfig } from '../../utils/Utils';
 
 function DashboardCard08() {
-
-  const chartData = {
-    labels: [
-      '12-01-2022',
-      '01-01-2023',
-      '02-01-2023',
-      '03-01-2023',
-      '04-01-2023',
-      '05-01-2023',
-      '06-01-2023',
-      '07-01-2023',
-      '08-01-2023',
-      '09-01-2023',
-      '10-01-2023',
-      '11-01-2023',
-      '12-01-2023',
-      '01-01-2024',
-      '02-01-2024',
-      '03-01-2024',
-      '04-01-2024',
-      '05-01-2024',
-      '06-01-2024',
-      '07-01-2024',
-      '08-01-2024',
-      '09-01-2024',
-      '10-01-2024',
-      '11-01-2024',
-      '12-01-2024',
-      '01-01-2025',
-    ],
-    datasets: [
-      // Indigo line
-      {
-        label: 'Current',
-        data: [73, 64, 73, 69, 104, 104, 164, 164, 120, 120, 120, 148, 142, 104, 122, 110, 104, 152, 166, 233, 268, 252, 284, 284, 333, 323],
-        borderColor: tailwindConfig().theme.colors.violet[500],
-        fill: false,
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 3,
-        pointBackgroundColor: tailwindConfig().theme.colors.violet[500],
-        pointHoverBackgroundColor: tailwindConfig().theme.colors.violet[500],
-        pointBorderWidth: 0,
-        pointHoverBorderWidth: 0,
-        clip: 20,
-        tension: 0.2,
-      },
-      // Blue line
-      {
-        label: 'Previous',
-        data: [184, 86, 42, 378, 42, 243, 38, 120, 0, 0, 42, 0, 84, 0, 276, 0, 124, 42, 124, 88, 88, 215, 156, 88, 124, 64],
-        borderColor: tailwindConfig().theme.colors.sky[500],
-        fill: false,
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 3,
-        pointBackgroundColor: tailwindConfig().theme.colors.sky[500],
-        pointHoverBackgroundColor: tailwindConfig().theme.colors.sky[500],
-        pointBorderWidth: 0,
-        pointHoverBorderWidth: 0,
-        clip: 20,
-        tension: 0.2,
-      },
-      // green line
-      {
-        label: 'Average',
-        data: [122, 170, 192, 86, 102, 124, 115, 115, 56, 104, 0, 72, 208, 186, 223, 188, 114, 162, 200, 150, 118, 118, 76, 122, 230, 268],
-        borderColor: tailwindConfig().theme.colors.green[500],
-        fill: false,
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 3,
-        pointBackgroundColor: tailwindConfig().theme.colors.green[500],
-        pointHoverBackgroundColor: tailwindConfig().theme.colors.green[500],
-        pointBorderWidth: 0,
-        pointHoverBorderWidth: 0,
-        clip: 20,
-        tension: 0.2,
-      },
-    ],
-  };
+  const metrics = [
+    {
+      name: 'Sample Integrity',
+      score: 98,
+      change: 2,
+      details: 'Based on 2,345 samples'
+    },
+    {
+      name: 'Collection Timing',
+      score: 94,
+      change: -1,
+      details: '15min avg deviation'
+    },
+    {
+      name: 'Data Completeness',
+      score: 96,
+      change: 0,
+      details: '98% fields populated'
+    },
+    {
+      name: 'Analysis Accuracy',
+      score: 99,
+      change: 3,
+      details: '0.01% margin of error'
+    }
+  ];
 
   return (
-    <div className="flex flex-col col-span-full sm:col-span-6 bg-white dark:bg-gray-800 shadow-sm rounded-xl">
-      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60 flex items-center">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">Sales Over Time (all stores)</h2>
+    <div className="col-span-full xl:col-span-6 bg-white dark:bg-slate-800 shadow-lg rounded-lg border border-slate-200 dark:border-slate-700">
+      <header className="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
+        <h2 className="font-semibold text-slate-800 dark:text-slate-100">Data Quality Metrics</h2>
       </header>
-      {/* Chart built with Chart.js 3 */}
-      {/* Change the height attribute to adjust the chart height */}
-      <LineChart data={chartData} width={595} height={248} />
+      <div className="p-3">
+        <div className="grid grid-cols-2 gap-4">
+          {metrics.map((metric) => (
+            <div key={metric.name} className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg">
+              <div className="flex justify-between items-center mb-1">
+                <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">{metric.name}</h3>
+                <span className={`text-xs font-semibold px-1.5 rounded-full ${
+                  metric.change > 0 ? 'bg-green-100 text-green-700' :
+                  metric.change < 0 ? 'bg-red-100 text-red-700' :
+                  'bg-slate-100 text-slate-700'
+                }`}>
+                  {metric.change > 0 ? '+' : ''}{metric.change}%
+                </span>
+              </div>
+              <div className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">
+                {metric.score}%
+              </div>
+              <div className="text-xs text-slate-500 dark:text-slate-400">{metric.details}</div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
